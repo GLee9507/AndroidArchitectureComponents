@@ -1,4 +1,4 @@
-package com.glee.android_architecture_components
+package com.glee.aac
 
 import org.junit.Test
 

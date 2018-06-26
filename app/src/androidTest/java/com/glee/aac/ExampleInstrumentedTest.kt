@@ -1,4 +1,4 @@
-package com.glee.android_architecture_components
+package com.glee.aac
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

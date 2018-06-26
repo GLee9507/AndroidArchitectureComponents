@@ -1,8 +1,8 @@
-package com.glee.android_architecture_components
+package com.glee.aac
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.glee.android_architecture_components.ui.main.MainFragment
+import com.glee.aac.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
