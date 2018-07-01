@@ -1,20 +1,15 @@
 package com.glee.aac.ui.main
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.ItemKeyedDataSource
-import androidx.paging.PageKeyedDataSource
 import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.glee.aac.R
 import com.glee.aac.data.model.ArticleData
-import com.glee.aac.net.NET
-import com.glee.aac.net.check
-import kotlinx.android.synthetic.main.item_test.view.*
 
 /**
  * Created with Android Studio.
@@ -34,8 +29,11 @@ class MainListAdapter : PagedListAdapter<ArticleData, MainViewHolder>(diffCallba
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MainViewHolder(inflater.inflate(R.layout.item_test, parent, false))
 
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.textView.text = getItem(position)?.author
+        if (getItem(position) != null) {
+            holder.textView.text = getItem(position)!!.title + "---"+ getItem(position)!!.id
+        }
     }
 
     companion object {

@@ -1,5 +1,6 @@
 package com.glee.aac.net
 
+import androidx.annotation.MainThread
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -14,7 +15,10 @@ import java.util.concurrent.TimeUnit
  * Date: 2018-06-02
  * Time: 10:51 AM
  */
-val NET: IApi by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+
+
+
+val RemoteRepo: IApi by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
     Retrofit.Builder()
             .baseUrl("http://www.wanandroid.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -26,6 +30,7 @@ val NET: IApi by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             .build()
             .create(IApi::class.java)
 }
+
 
 data class HttpError(val errorCode: Int, val errorMsg: String = "")
 

@@ -2,6 +2,7 @@ package com.glee.aac.ui.main
 
 import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +11,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
+import androidx.paging.LivePagedListProvider
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import com.glee.aac.data.model.ArticleData
 import com.glee.aac.databinding.MainFragmentBinding
+import com.glee.aac.net.RemoteRepo
 
 class MainFragment : Fragment() {
 
@@ -35,10 +38,18 @@ class MainFragment : Fragment() {
         val adapter = MainListAdapter()
         binding.recycler.adapter = adapter
 
+//        val list = PagedList.Builder<Int, ArticleData>(
+//                MainListDataSource()
+//                , PagedList.Config.Builder()
+//                .setInitialLoadSizeHint(20)
+//                .setPageSize(20)
+//                .build()).build()
+//        adapter.submitList(list)
         val pagedList = LivePagedListBuilder(object : DataSource.Factory<Int, ArticleData>() {
             override fun create(): DataSource<Int, ArticleData> =
                     MainListDataSource()
         }, PagedList.Config.Builder()
+                .setEnablePlaceholders(true)
                 .setInitialLoadSizeHint(20)
                 .setPageSize(20)
                 .build()).build()
