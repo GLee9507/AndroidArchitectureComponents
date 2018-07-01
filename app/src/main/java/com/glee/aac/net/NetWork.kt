@@ -27,6 +27,24 @@ val NET: IApi by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             .create(IApi::class.java)
 }
 
+data class HttpError(val errorCode: Int, val errorMsg: String = "")
+
+fun <T> retrofit2.Response<Response<T>>.check(success: (T) -> Unit, failure: (HttpError) -> Unit) {
+    if (isSuccessful) {
+        val body = body()
+        if (body != null) {
+            if (body.errorCode >= 0) {
+                success.invoke(body.data)
+            } else {
+                failure.invoke(HttpError(body.errorCode, body.errorMsg))
+            }
+        } else {
+            failure.invoke(HttpError(-100, "body is null"))
+        }
+    } else {
+        failure.invoke(HttpError(-999, "Http error ${code()}"))
+    }
+}
 
 
 

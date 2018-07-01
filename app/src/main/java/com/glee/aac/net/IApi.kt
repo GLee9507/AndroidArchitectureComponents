@@ -2,8 +2,9 @@ package com.glee.aac.net
 
 
 import com.glee.aac.data.model.MainArticleBean
-import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Url
 
 /**
@@ -15,8 +16,8 @@ import retrofit2.http.Url
  * Time: 9:38 PM
  */
 interface IApi {
-    @GET
-    fun getMainList(@Url url: String): Observable<Response<MainArticleBean>>
+    @GET("http://www.wanandroid.com/article/list/{page}/json")
+    fun getMainList(@Path("page") page: String): Call<Response<MainArticleBean>>
 }
 
 data class Response<T>(val data: T,
