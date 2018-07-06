@@ -1,10 +1,8 @@
 package com.glee.aac.ui.test
 
-import android.os.Bundle
+import android.annotation.SuppressLint
 import com.glee.aac.R
 import com.glee.aac.base.BaseFragment
-import com.glee.aac.base.BaseViewModel
-import com.glee.aac.databinding.TestFragmentBinding
 
 /**
  * Created with Android Studio.
@@ -15,16 +13,13 @@ import com.glee.aac.databinding.TestFragmentBinding
  * Time: 10:46 PM
  */
 class TestFragment : BaseFragment<TestFragmentBinding, TestViewModel>() {
+//    @SuppressLint("ValidFragment")
+//    constructor(viewModelClazz: Class<TestViewModel>) : super(viewModelClazz = viewModelClazz)
+
     override val layoutId = R.layout.test_fragment
 
     override fun init() {
     }
 
-    companion object {
-        fun newInstance(clazz: Class<out BaseViewModel>): TestFragment {
-            return TestFragment().apply {
-                arguments = Bundle().apply { putSerializable("vmClass", clazz) }
-            }
-        }
-    }
+
 }

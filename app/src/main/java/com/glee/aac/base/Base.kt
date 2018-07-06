@@ -1,18 +1,13 @@
 package com.glee.aac.base
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.glee.aac.BR
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.Method
-import java.lang.reflect.Proxy
 
 interface IView<VM : IViewModel> {
     val layoutId: Int
@@ -28,12 +23,33 @@ abstract class BaseViewModel : ViewModel(), IViewModel {
 
 }
 
-abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel> : Fragment(), com.glee.aac.base.IView<VM> {
+abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel>() : Fragment(), com.glee.aac.base.IView<VM> {
     lateinit var binding: B
+
+
+    constructor(viewModelClazz: Class<VM>) : this() {
+        val bundle = arguments
+        if (bundle != null) {
+            bundle.putSerializable(VIEW_MODEL_KEY, viewModelClazz)
+        } else {
+            arguments = Bundle().apply {
+                putSerializable(VIEW_MODEL_KEY, viewModelClazz)
+            }
+        }
+    }
+
+    override fun setArguments(args: Bundle?) {
+        val existArguments = arguments
+        if (existArguments != null) {
+            existArguments.putAll(args)
+        } else {
+            super.setArguments(args)
+        }
+    }
 
     @Suppress("UNCHECKED_CAST")
     override val viewModel: VM by lazy(LazyThreadSafetyMode.NONE) {
-        val vmClass: Class<VM> = arguments!!["vmClass"] as Class<VM>
+        val vmClass: Class<VM> = arguments!![VIEW_MODEL_KEY] as Class<VM>
         ViewModelProviders.of(this)[vmClass]
     }
 
@@ -51,7 +67,13 @@ abstract class BaseFragment<B : ViewDataBinding, VM : BaseViewModel> : Fragment(
         init()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+    }
 
+    companion object {
+        private const val VIEW_MODEL_KEY = "viewModelClazz"
+    }
 }
 
 //fun <T : BaseFragment<*, *>> newFragment(fragmentClazz: Class<out T>, vmClazz: Class<out BaseViewModel>): T {

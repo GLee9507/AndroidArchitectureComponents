@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         val binding = DataBindingUtil.setContentView<MainActivityBinding>(this, R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, TestFragment.newInstance(TestViewModel::class.java))
+                    .replace(R.id.container, TestFragment(TestViewModel::class.java))
                     .commitNow()
         }
     }
