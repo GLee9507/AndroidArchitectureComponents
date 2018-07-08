@@ -2,9 +2,11 @@ package com.glee.aac.net
 
 import androidx.annotation.MainThread
 import okhttp3.OkHttpClient
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 /**
@@ -17,8 +19,7 @@ import java.util.concurrent.TimeUnit
  */
 
 
-
-val RemoteRepo: IApi by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+val RemoteRepo: IApi by lazy(LazyThreadSafetyMode.PUBLICATION) {
     Retrofit.Builder()
             .baseUrl("http://www.wanandroid.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -33,6 +34,16 @@ val RemoteRepo: IApi by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
 
 
 data class HttpError(val errorCode: Int, val errorMsg: String = "")
+
+fun <T> retrofit2.Call<Response<T>>.execute(success: (T) -> Unit, failure: (HttpError) -> Unit) {
+    try {
+        execute().check(success, failure)
+
+    } catch (e: IOException) {
+        failure.invoke(HttpError(-996, e.toString()))
+    }
+}
+
 
 fun <T> retrofit2.Response<Response<T>>.check(success: (T) -> Unit, failure: (HttpError) -> Unit) {
     if (isSuccessful) {

@@ -1,66 +1,46 @@
 package com.glee.aac.ui.main
 
+import com.glee.aac.R
+import com.glee.aac.base.BaseFragment
+import com.glee.aac.databinding.MainFragmentBinding
 import android.nfc.tech.MifareUltralight.PAGE_SIZE
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
-import androidx.paging.LivePagedListProvider
 import androidx.paging.PagedList
-import androidx.recyclerview.widget.RecyclerView
 import com.glee.aac.data.model.ArticleData
-import com.glee.aac.databinding.MainFragmentBinding
-import com.glee.aac.net.RemoteRepo
-
-class MainFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
-    private lateinit var viewModel: MainViewModel
-    private lateinit var binding: MainFragmentBinding
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View =
-            with(MainFragmentBinding.inflate(inflater, container, false)) {
-                binding = this
-                root
-            }
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val adapter = MainListAdapter()
+/**
+ * Created with Android Studio.
+ * OS: Arch Linux
+ * Description:
+ * User: Liji
+ * Date: 2018-07-08
+ * Time: 12:38 PM
+ */
+
+class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
+    override val layoutId = R.layout.main_fragment
+    override fun init() {
+        val adapter = MainAdapter(R.layout.item_main)
         binding.recycler.adapter = adapter
 
-//        val list = PagedList.Builder<Int, ArticleData>(
-//                MainListDataSource()
-//                , PagedList.Config.Builder()
-//                .setInitialLoadSizeHint(20)
-//                .setPageSize(20)
-//                .build()).build()
-//        adapter.submitList(list)
-        val pagedList = LivePagedListBuilder(object : DataSource.Factory<Int, ArticleData>() {
-            override fun create(): DataSource<Int, ArticleData> =
-                    MainListDataSource()
-        }, PagedList.Config.Builder()
-                .setEnablePlaceholders(true)
-                .setInitialLoadSizeHint(20)
+
+        val config = PagedList.Config.Builder()
+                .setInitialLoadSizeHint(20)//首次加载10
                 .setPageSize(20)
-                .build()).build()
-        pagedList.observe(this, Observer {
+                .build()
+
+        val data = LivePagedListBuilder<Int, ArticleData>(object : DataSource.Factory<Int, ArticleData>() {
+            override fun create(): DataSource<Int, ArticleData> {
+                return MainDataSource()
+            }
+        }, config).setInitialLoadKey(0)
+                .build()
+        data.observe(this, Observer {
             adapter.submitList(it)
         })
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
-
 }
