@@ -8,7 +8,9 @@ package com.glee.aac.data.model
  * Date: 2018-06-23
  * Time: 11:02 PM
  */
-
+interface DiffSupport {
+    val diffSupportKey: String
+}
 
 data class MainArticleBean(
 
@@ -45,5 +47,8 @@ data class ArticleData(
         val userId: Int,
         val visible: Int,
         val zan: Int
-)
+) : DiffSupport {
+    override val diffSupportKey: String
+        get() = id.toString()
+}
 

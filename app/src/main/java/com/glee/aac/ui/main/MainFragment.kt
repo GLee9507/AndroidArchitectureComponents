@@ -3,7 +3,6 @@ package com.glee.aac.ui.main
 import com.glee.aac.R
 import com.glee.aac.base.BaseFragment
 import com.glee.aac.databinding.MainFragmentBinding
-import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import androidx.lifecycle.Observer
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
@@ -22,25 +21,25 @@ import com.glee.aac.data.model.ArticleData
 
 class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
     override val layoutId = R.layout.main_fragment
-    override fun init() {
-        val adapter = MainAdapter(R.layout.item_main)
-        binding.recycler.adapter = adapter
-
-
-        val config = PagedList.Config.Builder()
-                .setInitialLoadSizeHint(20)//首次加载10
-                .setPageSize(20)
-                .build()
-
-        val data = LivePagedListBuilder<Int, ArticleData>(object : DataSource.Factory<Int, ArticleData>() {
-            override fun create(): DataSource<Int, ArticleData> {
-                return MainDataSource()
-            }
-        }, config).setInitialLoadKey(0)
-                .build()
-        data.observe(this, Observer {
-            adapter.submitList(it)
-        })
-
-    }
+//    override fun init() {
+//        val adapter = SimplePagingAdapter(R.layout.item_main)
+//        binding.recycler.adapter = adapter
+//
+//
+//        val config = PagedList.Config.Builder()
+//                .setInitialLoadSizeHint(20)//首次加载10
+//                .setPageSize(20)
+//                .build()
+//
+//        val data = LivePagedListBuilder<Int, ArticleData>(object : DataSource.Factory<Int, ArticleData>() {
+//            override fun create(): DataSource<Int, ArticleData> {
+//                return MainDataSource()
+//            }
+//        }, config).setInitialLoadKey(0)
+//                .build()
+//        data.observe(this, Observer {
+//            adapter.submitList(it)
+//        })
+//
+//    }
 }

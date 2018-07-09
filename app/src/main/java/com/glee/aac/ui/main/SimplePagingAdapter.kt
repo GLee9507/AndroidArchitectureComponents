@@ -9,7 +9,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.glee.aac.BR
-import com.glee.aac.data.model.ArticleData
+import com.glee.aac.data.model.DiffSupport
 
 /**
  * Created with Android Studio.
@@ -19,18 +19,18 @@ import com.glee.aac.data.model.ArticleData
  * Date: 2018-07-08
  * Time: 12:44 PM
  */
-class MainAdapter(@LayoutRes private val itemLayoutId: Int) : PagedListAdapter<ArticleData, MainViewHolder>(DIFF) {
+class SimplePagingAdapter(@LayoutRes private val itemLayoutId: Int) : PagedListAdapter<DiffSupport, SimpleViewHolder>(DIFF) {
     lateinit var inflater: LayoutInflater
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         inflater = LayoutInflater.from(recyclerView.context)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MainViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SimpleViewHolder(
             DataBindingUtil.inflate<ViewDataBinding>(inflater, itemLayoutId, parent, false))
 
 
-    override fun onBindViewHolder(holder: MainViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: SimpleViewHolder, position: Int) =
             with(holder.binding) {
                 setVariable(BR.itemData, getItem(position))
                 executePendingBindings()
@@ -38,13 +38,13 @@ class MainAdapter(@LayoutRes private val itemLayoutId: Int) : PagedListAdapter<A
 
 
     companion object {
-        val DIFF = object : DiffUtil.ItemCallback<ArticleData>() {
-            override fun areItemsTheSame(oldItem: ArticleData, newItem: ArticleData): Boolean {
+        val DIFF = object : DiffUtil.ItemCallback<DiffSupport>() {
+            override fun areItemsTheSame(oldItem: DiffSupport, newItem: DiffSupport): Boolean {
                 return oldItem === newItem
             }
 
-            override fun areContentsTheSame(oldItem: ArticleData, newItem: ArticleData): Boolean {
-                return oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: DiffSupport, newItem: DiffSupport): Boolean {
+                return oldItem.diffSupportKey == newItem.diffSupportKey
             }
 
         }
@@ -52,7 +52,7 @@ class MainAdapter(@LayoutRes private val itemLayoutId: Int) : PagedListAdapter<A
 }
 
 
-class MainViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root){
+class SimpleViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root){
     init {
 
     }
