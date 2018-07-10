@@ -11,14 +11,6 @@ import com.glee.aac.base.BaseViewModel
  * Time: 12:39 PM
  */
 class MainViewModel : BaseViewModel() {
-//     val pagingData: LiveData<PagedList<ArticleData>>by lazy(LazyThreadSafetyMode.NONE) {
-//
-//         PagingData<ArticleData>(20){
-//           val a = RemoteRepo.getMainList(it.toString()).kExecute()
-//             if (a.isSuccessful) {
-//              return@PagingData a.data.datas
-//             }
-//         }.liveData
-//    }
+
 
 }
