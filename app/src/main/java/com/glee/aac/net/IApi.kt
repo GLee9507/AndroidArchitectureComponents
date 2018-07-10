@@ -20,6 +20,8 @@ interface IApi {
     fun getMainList(@Path("page") page: String): Call<Response<MainArticleBean>>
 }
 
-data class Response<T>(val data: T,
+data class Response<T>(
                        val errorMsg: String = "",
-                       val errorCode: Int)
+                       val errorCode: Int,
+                       val data: T? = null,
+                       val isSuccessful: Boolean=false)

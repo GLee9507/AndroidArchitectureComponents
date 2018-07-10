@@ -35,30 +35,63 @@ val RemoteRepo: IApi by lazy(LazyThreadSafetyMode.PUBLICATION) {
 
 data class HttpError(val errorCode: Int, val errorMsg: String = "")
 
-fun <T> retrofit2.Call<Response<T>>.execute(success: (T) -> Unit, failure: (HttpError) -> Unit) {
+//fun <T> retrofit2.Call<Response<T>>.execute(success: (T) -> Unit, failure: (HttpError) -> Unit) {
+//    try {
+//        execute().check(success, failure)
+//
+//    } catch (e: IOException) {
+//        failure.invoke(HttpError(-996, e.toString()))
+//    }
+//}
+
+
+//fun <T> retrofit2.Response<Response<T>>.check(success: (T) -> Unit, failure: (HttpError) -> Unit) {
+//    if (isSuccessful) {
+//        val body = body()
+//        if (body != null) {
+//            if (body.errorCode >= 0) {
+//                success.invoke(body.data)
+//            } else {
+//                failure.invoke(HttpError(body.errorCode, body.errorMsg))
+//            }
+//        } else {
+//            failure.invoke(HttpError(-100, "body is null"))
+//        }
+//    } else {
+//        failure.invoke(HttpError(-999, "Http error ${code()}"))
+//    }
+//}
+
+fun <T> retrofit2.Call<Response<T>>.kExecute(): Response<T> {
     try {
-        execute().check(success, failure)
+        val response = execute()
 
-    } catch (e: IOException) {
-        failure.invoke(HttpError(-996, e.toString()))
-    }
-}
-
-
-fun <T> retrofit2.Response<Response<T>>.check(success: (T) -> Unit, failure: (HttpError) -> Unit) {
-    if (isSuccessful) {
-        val body = body()
-        if (body != null) {
-            if (body.errorCode >= 0) {
-                success.invoke(body.data)
-            } else {
-                failure.invoke(HttpError(body.errorCode, body.errorMsg))
-            }
-        } else {
-            failure.invoke(HttpError(-100, "body is null"))
+        return when {
+            response == null -> Response("response is null", -99)
+            !response.isSuccessful -> Response(response.message(), response.code())
+            response.body() == null -> Response("body is null", -98)
+            response.body()!!.data == null -> Response("data is null", -97, null, true)
+            else -> response.body()!!
         }
-    } else {
-        failure.invoke(HttpError(-999, "Http error ${code()}"))
+//
+//
+//        if (!response.isSuccessful) {
+//            return Response(response.message(), response.code())
+//        } else {
+//            val body = response.body()
+//            if (body == null) {
+//                return Response("body is null", -99)
+//            } else {
+//                val data = body.data
+//                if (data == null) {
+//                    return Response("data is null", -98, null, true)
+//                } else {
+//                    return body
+//                }
+//            }
+//        }
+    } catch (e: IOException) {
+        return Response(e.toString(), -100)
     }
 }
 

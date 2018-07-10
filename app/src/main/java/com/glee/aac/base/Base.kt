@@ -19,9 +19,9 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            Log.e("glee9507",throwable.toString())
-        }
+//        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+//            Log.e("glee9507",throwable.toString())
+//        }
     }
 }
 
