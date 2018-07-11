@@ -1,18 +1,11 @@
 package com.glee.aac.util
 
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.glee.aac.data.model.ArticleData
 import com.glee.aac.data.model.DiffSupport
-import com.glee.aac.ui.main.MainDataSource
 import com.glee.aac.ui.main.SimplePagingAdapter
-import com.glee.aac.ui.main.SimpleViewHolder
 
 /**
  * Created with Android Studio.
@@ -24,6 +17,7 @@ import com.glee.aac.ui.main.SimpleViewHolder
  */
 @Suppress("UNCHECKED_CAST")
 object Binding {
+
     @JvmStatic
     @BindingAdapter("itemLayoutId", "dataSource", requireAll = true)
     fun recyclerAdapter(view: RecyclerView, @LayoutRes itemLayoutId: Int = 0, dataSource: PagedList<out DiffSupport>?) {

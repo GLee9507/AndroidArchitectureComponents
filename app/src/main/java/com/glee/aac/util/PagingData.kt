@@ -14,7 +14,7 @@ import com.glee.aac.data.model.DiffSupport
  * Date: 2018-07-09
  * Time: 9:52 PM
  */
-class PagingData<D : DiffSupport>(pageSize: Int, load: (page: Int) -> MutableList<D>) {
+class PagingData<D : DiffSupport>(pageSize: Int, load: (page: Int, callback: (result: List<D>) -> Unit) -> Unit) {
     val liveData = LivePagedListBuilder<Int, D>(object : DataSource.Factory<Int, D>() {
         override fun create(): DataSource<Int, D> {
             return object : PageKeyedDataSource<Int, D>() {
@@ -23,12 +23,16 @@ class PagingData<D : DiffSupport>(pageSize: Int, load: (page: Int) -> MutableLis
                 }
 
                 override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, D>) {
-                    callback.onResult(load.invoke(0), null, 1)
+                    load.invoke(0) {
+                        callback.onResult(it, null, 1)
+                    }
 
                 }
 
                 override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, D>) {
-                    callback.onResult(load.invoke(params.key),params.key+1)
+                    load.invoke(params.key) {
+                        callback.onResult(it, params.key + 1)
+                    }
                 }
             }
         }

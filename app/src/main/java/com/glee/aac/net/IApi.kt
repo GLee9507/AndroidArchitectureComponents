@@ -23,5 +23,5 @@ interface IApi {
 data class Response<T>(
                        val errorMsg: String = "",
                        val errorCode: Int,
-                       val data: T? = null,
+                       val data: T ,
                        val isSuccessful: Boolean=false)
