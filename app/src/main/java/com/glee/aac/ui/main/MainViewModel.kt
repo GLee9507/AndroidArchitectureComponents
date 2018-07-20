@@ -2,6 +2,7 @@ package com.glee.aac.ui.main
 
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.Transformations
 import com.glee.aac.base.BaseViewModel
 import com.glee.aac.data.model.ArticleData
 import com.glee.aac.net.RemoteRepo
@@ -18,8 +19,9 @@ import com.glee.aac.util.PagingData
  */
 class MainViewModel : BaseViewModel() {
     val pagingData by lazy {
+
+
         PagingData<ArticleData>(20) { page, callback ->
-                Log.e("glee9507", page.toString())
             RemoteRepo.getMainList(page = page.toString()).execute({
                 callback.invoke(it.datas)
             }, {
@@ -29,4 +31,7 @@ class MainViewModel : BaseViewModel() {
         }.liveData
     }
 
+    init {
+
+    }
 }

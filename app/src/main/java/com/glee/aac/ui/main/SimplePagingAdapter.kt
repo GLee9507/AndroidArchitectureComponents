@@ -19,25 +19,14 @@ import com.glee.aac.data.model.DiffSupport
  * Date: 2018-07-08
  * Time: 12:44 PM
  */
-class SimplePagingAdapter(@LayoutRes private val itemLayoutId: Int) : PagedListAdapter<DiffSupport, SimpleViewHolder>(
-        DIFF
-//        object : DiffUtil.ItemCallback<D>() {
-//            override fun areItemsTheSame(oldItem: D, newItem: D): Boolean {
-//                return oldItem === newItem
-//            }
-//
-//            override fun areContentsTheSame(oldItem: D, newItem: D): Boolean {
-//                return oldItem.diffSupportKey == newItem.diffSupportKey
-//            }
-//
-//        }
+class SimplePagingAdapter(@LayoutRes private val itemLayoutId: Int) : PagedListAdapter<DiffSupport, SimpleViewHolder>(DIFF) {
 
+    private lateinit var inflater: LayoutInflater
 
-) {
-    lateinit var inflater: LayoutInflater
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         inflater = LayoutInflater.from(recyclerView.context)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SimpleViewHolder(
@@ -60,13 +49,12 @@ class SimplePagingAdapter(@LayoutRes private val itemLayoutId: Int) : PagedListA
             override fun areContentsTheSame(oldItem: DiffSupport, newItem: DiffSupport): Boolean {
                 return oldItem.diffSupportKey == newItem.diffSupportKey
             }
-
         }
     }
 }
 
 
-class SimpleViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root){
+class SimpleViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
     init {
 
     }

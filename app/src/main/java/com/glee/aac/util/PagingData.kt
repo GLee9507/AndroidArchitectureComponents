@@ -1,8 +1,10 @@
 package com.glee.aac.util
 
+import android.util.Log
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PageKeyedDataSource
+import androidx.paging.PagedList
 import com.glee.aac.data.model.DiffSupport
 
 
@@ -36,7 +38,24 @@ class PagingData<D : DiffSupport>(pageSize: Int, load: (page: Int, callback: (re
                 }
             }
         }
-    }, pageSize).build()
+    }, pageSize).apply {
+        setBoundaryCallback(object : PagedList.BoundaryCallback<D>() {
+            override fun onZeroItemsLoaded() {
+                super.onZeroItemsLoaded()
+                Log.d("glee9507", "onZeroItemsLoaded")
+            }
+
+            override fun onItemAtEndLoaded(itemAtEnd: D) {
+                super.onItemAtEndLoaded(itemAtEnd)
+                Log.d("glee9507", "onItemAtEndLoaded" + itemAtEnd.toString())
+            }
+
+            override fun onItemAtFrontLoaded(itemAtFront: D) {
+                super.onItemAtFrontLoaded(itemAtFront)
+                Log.d("glee9507", "onItemAtFrontLoaded" + itemAtFront.toString())
+            }
+        })
+    }.build()
 
 
 //    val liveData by lazy(LazyThreadSafetyMode.NONE) {
