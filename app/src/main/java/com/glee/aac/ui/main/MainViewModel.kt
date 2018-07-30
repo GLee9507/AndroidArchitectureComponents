@@ -25,6 +25,7 @@ class MainViewModel : BaseViewModel() {
             RemoteRepo.getMainList(page = page.toString()).execute({
                 callback.invoke(it.datas)
             }, {
+                callback.invoke(ArrayList())
                 Log.e("glee9507", it.toString())
             })
 

@@ -21,7 +21,7 @@ class PagingData<D : DiffSupport>(pageSize: Int, load: (page: Int, callback: (re
         override fun create(): DataSource<Int, D> {
             return object : PageKeyedDataSource<Int, D>() {
                 override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, D>) {
-
+                    
                 }
 
                 override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, D>) {

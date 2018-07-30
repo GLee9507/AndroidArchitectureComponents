@@ -24,6 +24,9 @@ val RemoteRepo: IApi by lazy(LazyThreadSafetyMode.PUBLICATION) {
             .baseUrl("http://www.wanandroid.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .callbackExecutor {
+                it.run()
+            }
             .client(OkHttpClient.Builder()
                     .writeTimeout(30, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
@@ -33,7 +36,7 @@ val RemoteRepo: IApi by lazy(LazyThreadSafetyMode.PUBLICATION) {
 }
 
 
-data class HttpError(val errorCode: Int, val errorMsg: String = ""){
+data class HttpError(val errorCode: Int, val errorMsg: String = "") {
     override fun toString(): String {
         return "HttpError(errorCode=$errorCode, errorMsg='$errorMsg')"
     }
@@ -42,7 +45,6 @@ data class HttpError(val errorCode: Int, val errorMsg: String = ""){
 fun <T> retrofit2.Call<Response<T>>.execute(success: (T) -> Unit, failure: (HttpError) -> Unit) {
     try {
         execute().check(success, failure)
-
     } catch (e: IOException) {
         failure.invoke(HttpError(-996, e.toString()))
     }
