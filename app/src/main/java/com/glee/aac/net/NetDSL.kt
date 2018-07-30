@@ -3,35 +3,66 @@ package com.glee.aac.net
 import retrofit2.Call
 import retrofit2.Callback
 
-class CallWrapper<T>(val call: Call<T>) {
-    var retry = false
-    var cache = false
-    private var success: (retrofit2.Response<T>?) -> Unit = {}
-    private var error: (Throwable?) -> Unit = {}
 
-    fun success(function: (retrofit2.Response<T>?) -> Unit) {
-        success = function
+data class CallDSL<T>(val call: Call<Response<T>>) {
+    internal var success: ((T) -> Unit)? = null
+    internal var error: ((Throwable) -> Unit)? = null
+    internal var cache: Cache? = null
+    fun success(block: (T) -> Unit) {
+        success = block
     }
 
-    fun error(function: (Throwable?) -> Unit) {
-        error = function
+    fun error(block: (Throwable) -> Unit) {
+        error = block
     }
+
+    inline fun cache(block: Cache.() -> Unit) = Cache().apply(block)
 
 }
 
-//fun <T> retrofit2.Call<T>.http(block: CallWrapper<T>.() -> Unit) {
-//    val callWrapper = CallWrapper(this)
-//    callWrapper.block()
-//    callWrapper.call.enqueue(object : Callback<T> {
-//        override fun onFailure(call: Call<T>?, t: Throwable?) {
-//            callWrapper.error.invoke(t)
-//        }
-//
-//        override fun onResponse(call: Call<T>?, response: retrofit2.Response<T>?) {
-//            callWrapper.success.invoke(response)
-//        }
-//    })
-//}
+class Cache {
+    var cachePath: String? = null
+
+    constructor(cachePath: String) {
+        this.cachePath = cachePath
+    }
+
+    constructor()
+
+    fun <T> bindCall(callDSL: CallDSL<T>) {
+        callDSL.cache = this
+    }
+}
+
+fun <T> Call<Response<T>>.http(block: CallDSL<T>.() -> Unit) {
+    val callDSL = CallDSL(this)
+    block.invoke(callDSL)
+    enqueue(object : Callback<Response<T>> {
+        override fun onFailure(call: Call<Response<T>>?, t: Throwable?) {
+
+            if (t != null) {
+                callDSL.error?.invoke(t)
+            } else {
+
+                callDSL.error?.invoke(Throwable("null"))
+            }
+        }
+
+        override fun onResponse(call: Call<Response<T>>?, response: retrofit2.Response<Response<T>>?) {
+            if (response != null) {
+                val body = response.body()
+                if (body != null) {
+                    val data = body.data
+                    if (data != null) {
+                        callDSL.success?.invoke(data)
+                        return
+                    }
+                }
+            }
+            callDSL.error?.invoke(Throwable("null"))
+        }
+    })
+}
 
 
 

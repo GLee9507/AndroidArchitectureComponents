@@ -44,7 +44,7 @@ dependencies {
     implementation "com.google.android.material:material:$androidx_version"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$androidx_version"
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
-//    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version" // use -ktx for Kotlin
     // alternatively - just LiveData

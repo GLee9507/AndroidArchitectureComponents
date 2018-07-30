@@ -1,8 +1,6 @@
 package com.glee.aac.net
 
 import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,9 +21,6 @@ val RETROFIT: Retrofit by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             .baseUrl("http://www.wanandroid.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .callbackExecutor {
-                it.run()
-            }
             .client(OkHttpClient.Builder()
                     .writeTimeout(30, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)

@@ -1,8 +1,6 @@
 package com.glee.aac.ui.main
 
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.Transformations
 import com.glee.aac.base.BaseViewModel
 import com.glee.aac.data.model.ArticleData
 import com.glee.aac.net.RemoteRepo
@@ -35,7 +33,9 @@ class MainViewModel : BaseViewModel() {
 
     init {
         RemoteRepo.getMainList("1").http {
-            retry = true
+            cache {
+                cachePath = "/dev/sda1"
+            }
             success {
 
             }
