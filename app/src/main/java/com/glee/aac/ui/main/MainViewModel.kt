@@ -7,6 +7,7 @@ import com.glee.aac.base.BaseViewModel
 import com.glee.aac.data.model.ArticleData
 import com.glee.aac.net.RemoteRepo
 import com.glee.aac.net.execute
+import com.glee.aac.net.http
 import com.glee.aac.util.PagingData
 
 /**
@@ -33,6 +34,14 @@ class MainViewModel : BaseViewModel() {
     }
 
     init {
+        RemoteRepo.getMainList("1").http {
+            retry = true
+            success {
 
+            }
+            error {
+
+            }
+        }
     }
 }

@@ -39,12 +39,18 @@ dependencies {
 
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:$androidx"
-    implementation "androidx.recyclerview:recyclerview:$androidx"
-    implementation "com.google.android.material:material:$androidx"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$androidx"
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.recyclerview:recyclerview:$androidx_version"
+    implementation "com.google.android.material:material:$androidx_version"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$androidx_version"
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
+//    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version" // use -ktx for Kotlin
+    // alternatively - just LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
+    kapt "android.arch.lifecycle:compiler:$lifecycle_version"
     implementation "androidx.paging:paging-runtime:2.0.0-beta01"
 //    implementation 'androidx.paging:paging-rxjava2:2.0.0-alpha1'
 //    kapt 'androidx.databinding:databinding-compiler:3.3.0-alpha03'
